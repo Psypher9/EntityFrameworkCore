@@ -35,4 +35,27 @@ namespace Microsoft.EntityFrameworkCore.Query.Internal
             => _model.Relational().FindDbFunction(methodCallExpression.Method) == null
                && base.IsEvaluatableMethodCall(methodCallExpression);
     }
+
+    public class RelationalEvaluatableExpressionFilter2 : EvaluatableExpressionFilter2
+    {
+        private readonly IModel _model;
+
+        public RelationalEvaluatableExpressionFilter2(IModel model)
+        {
+            Check.NotNull(model, nameof(model));
+
+            _model = model;
+        }
+
+        public override bool IsEvaluatableExpression(Expression expression)
+        {
+            if (expression is MethodCallExpression methodCallExpression
+                && _model.Relational().FindDbFunction(methodCallExpression.Method) != null)
+            {
+                return false;
+            }
+
+            return base.IsEvaluatableExpression(expression);
+        }
+    }
 }

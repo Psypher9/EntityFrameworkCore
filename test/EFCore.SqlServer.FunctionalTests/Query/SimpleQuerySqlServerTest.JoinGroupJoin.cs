@@ -59,20 +59,26 @@ FROM (
     FROM [Employees] AS [e]
 ) AS [t]",
                 //
-                @"SELECT [t1].[EmployeeID], [t1].[City], [t1].[Country], [t1].[FirstName], [t1].[ReportsTo], [t1].[Title]
+                @"@__p_1='6'
+@__p_0='2'
+
+SELECT [t1].[EmployeeID], [t1].[City], [t1].[Country], [t1].[FirstName], [t1].[ReportsTo], [t1].[Title]
 FROM (
     SELECT [e1].[EmployeeID], [e1].[City], [e1].[Country], [e1].[FirstName], [e1].[ReportsTo], [e1].[Title]
     FROM [Employees] AS [e1]
     ORDER BY (SELECT 1)
-    OFFSET 6 ROWS FETCH NEXT 2 ROWS ONLY
+    OFFSET @__p_1 ROWS FETCH NEXT @__p_0 ROWS ONLY
 ) AS [t1]",
                 //
-                @"SELECT [t1].[EmployeeID], [t1].[City], [t1].[Country], [t1].[FirstName], [t1].[ReportsTo], [t1].[Title]
+                @"@__p_1='6'
+@__p_0='2'
+
+SELECT [t1].[EmployeeID], [t1].[City], [t1].[Country], [t1].[FirstName], [t1].[ReportsTo], [t1].[Title]
 FROM (
     SELECT [e1].[EmployeeID], [e1].[City], [e1].[Country], [e1].[FirstName], [e1].[ReportsTo], [e1].[Title]
     FROM [Employees] AS [e1]
     ORDER BY (SELECT 1)
-    OFFSET 6 ROWS FETCH NEXT 2 ROWS ONLY
+    OFFSET @__p_1 ROWS FETCH NEXT @__p_0 ROWS ONLY
 ) AS [t1]");
         }
 

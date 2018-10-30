@@ -583,7 +583,7 @@ WHERE [w].[AmmunitionType] IS NULL");
             await base.Where_nullable_enum_with_non_nullable_parameter(isAsync);
 
             AssertSql(
-                @"@__ammunitionType_0='1'
+                @"@__ammunitionType_0='1' (Nullable = true)
 
 SELECT [w].[Id], [w].[AmmunitionType], [w].[IsAutomatic], [w].[Name], [w].[OwnerFullName], [w].[SynergyWithId]
 FROM [Weapons] AS [w]
@@ -667,18 +667,11 @@ WHERE ([w].[AmmunitionType] & NULL) > 0");
             await base.Where_bitwise_and_nullable_enum_with_non_nullable_parameter(isAsync);
 
             AssertSql(
-                @"@__ammunitionType_0='1'
+                @"@__ammunitionType_0='Cartridge' (Nullable = true)
 
 SELECT [w].[Id], [w].[AmmunitionType], [w].[IsAutomatic], [w].[Name], [w].[OwnerFullName], [w].[SynergyWithId]
 FROM [Weapons] AS [w]
 WHERE ([w].[AmmunitionType] & @__ammunitionType_0) > 0");
-
-            Assert.Contains(
-                RelationalStrings.LogValueConversionSqlLiteralWarning
-                    .GenerateMessage(
-                        typeof(AmmunitionType).ShortDisplayName(),
-                        new EnumToNumberConverter<AmmunitionType, int>().GetType().ShortDisplayName()),
-                Fixture.TestSqlLoggerFactory.Log.Select(l => l.Message));
         }
 
         public override async Task Where_bitwise_and_nullable_enum_with_nullable_parameter(bool isAsync)
@@ -686,7 +679,7 @@ WHERE ([w].[AmmunitionType] & @__ammunitionType_0) > 0");
             await base.Where_bitwise_and_nullable_enum_with_nullable_parameter(isAsync);
 
             AssertSql(
-                @"@__ammunitionType_0='1' (Nullable = true)
+                @"@__ammunitionType_0='Cartridge' (Nullable = true)
 
 SELECT [w].[Id], [w].[AmmunitionType], [w].[IsAutomatic], [w].[Name], [w].[OwnerFullName], [w].[SynergyWithId]
 FROM [Weapons] AS [w]
@@ -697,13 +690,6 @@ WHERE ([w].[AmmunitionType] & @__ammunitionType_0) > 0",
 SELECT [w].[Id], [w].[AmmunitionType], [w].[IsAutomatic], [w].[Name], [w].[OwnerFullName], [w].[SynergyWithId]
 FROM [Weapons] AS [w]
 WHERE ([w].[AmmunitionType] & @__ammunitionType_0) > 0");
-
-            Assert.Contains(
-                RelationalStrings.LogValueConversionSqlLiteralWarning
-                    .GenerateMessage(
-                        typeof(AmmunitionType).ShortDisplayName(),
-                        new EnumToNumberConverter<AmmunitionType, int>().GetType().ShortDisplayName()),
-                Fixture.TestSqlLoggerFactory.Log.Select(l => l.Message));
         }
 
         public override async Task Where_bitwise_or_enum(bool isAsync)
@@ -3083,11 +3069,9 @@ WHERE [m].[Timeline] <> CAST(SYSUTCDATETIME() AS datetimeoffset)");
             await base.Where_datetimeoffset_date_component(isAsync);
 
             AssertSql(
-                @"@__Date_0='0001-01-01T00:00:00'
-
-SELECT [m].[Id], [m].[CodeName], [m].[Rating], [m].[Timeline]
+                @"SELECT [m].[Id], [m].[CodeName], [m].[Rating], [m].[Timeline]
 FROM [Missions] AS [m]
-WHERE CONVERT(date, [m].[Timeline]) > @__Date_0");
+WHERE CONVERT(date, [m].[Timeline]) > '0001-01-01T00:00:00.0000000'");
         }
 
         public override async Task Where_datetimeoffset_year_component(bool isAsync)

@@ -3145,7 +3145,7 @@ namespace Microsoft.EntityFrameworkCore.Query
 
         [ConditionalTheory]
         [MemberData(nameof(IsAsyncData))]
-        public virtual Task OrderBy_conditional_operator_where_condition_null(bool isAsync)
+        public virtual Task OrderBy_conditional_operator_where_condition_false(bool isAsync)
         {
             var fakeCustomer = new Customer();
             return AssertQuery<Customer>(
@@ -3581,11 +3581,22 @@ namespace Microsoft.EntityFrameworkCore.Query
 
         [ConditionalTheory]
         [MemberData(nameof(IsAsyncData))]
-        public virtual Task DateTime_parse_is_parameterized(bool isAsync)
+        public virtual Task DateTime_parse_is_inlined(bool isAsync)
         {
             return AssertQuery<Order>(
                 isAsync,
                 os => os.Where(o => o.OrderDate > DateTime.Parse("1/1/1998 12:00:00 PM")),
+                entryCount: 267);
+        }
+
+        [ConditionalTheory]
+        [MemberData(nameof(IsAsyncData))]
+        public virtual Task DateTime_parse_is_parameterized_when_from_closure(bool isAsync)
+        {
+            var date = "1/1/1998 12:00:00 PM";
+            return AssertQuery<Order>(
+                isAsync,
+                os => os.Where(o => o.OrderDate > DateTime.Parse(date)),
                 entryCount: 267);
         }
 
@@ -3661,6 +3672,7 @@ namespace Microsoft.EntityFrameworkCore.Query
         {
             return AssertQuery<Customer>(
                 isAsync,
+                // This is funcletized because we funcletize static member access, since they could change in certain cases.
                 cs => cs.Where(c => c.CustomerID.Contains(Environment.NewLine)));
         }
 
@@ -5484,7 +5496,7 @@ namespace Microsoft.EntityFrameworkCore.Query
                 elementSorter: e => e.Id);
         }
 
-        [ConditionalFact]
+        //[ConditionalFact]
         public virtual void Streaming_chained_sync_query()
         {
             using (var context = CreateContext())

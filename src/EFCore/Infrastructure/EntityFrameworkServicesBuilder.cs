@@ -147,6 +147,7 @@ namespace Microsoft.EntityFrameworkCore.Infrastructure
                 { typeof(IResettableService), new ServiceCharacteristics(ServiceLifetime.Scoped, multipleRegistrations: true) },
                 { typeof(ISingletonOptions), new ServiceCharacteristics(ServiceLifetime.Singleton, multipleRegistrations: true) },
                 { typeof(IEvaluatableExpressionFilter), new ServiceCharacteristics(ServiceLifetime.Scoped) },
+                { typeof(EvaluatableExpressionFilterBase2), new ServiceCharacteristics(ServiceLifetime.Scoped) },
                 { typeof(ITypeMappingSourcePlugin), new ServiceCharacteristics(ServiceLifetime.Singleton, multipleRegistrations: true) }
             };
 
@@ -281,6 +282,7 @@ namespace Microsoft.EntityFrameworkCore.Infrastructure
             TryAdd<IResettableService, IDbContextTransactionManager>(p => p.GetService<IDbContextTransactionManager>());
             TryAdd<Func<IStateManager>>(p => p.GetService<IStateManager>);
             TryAdd<IEvaluatableExpressionFilter, EvaluatableExpressionFilter>();
+            TryAdd<EvaluatableExpressionFilterBase2, EvaluatableExpressionFilter2>();
             TryAdd<IValueConverterSelector, ValueConverterSelector>();
             TryAdd<IConstructorBindingFactory, ConstructorBindingFactory>();
             TryAdd<ILazyLoader, LazyLoader>();

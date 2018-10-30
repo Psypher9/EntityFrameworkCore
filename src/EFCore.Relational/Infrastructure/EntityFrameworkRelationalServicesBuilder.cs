@@ -174,6 +174,7 @@ namespace Microsoft.EntityFrameworkCore.Infrastructure
             TryAdd<ISqlTranslatingExpressionVisitorFactory, SqlTranslatingExpressionVisitorFactory>();
             TryAdd<INamedConnectionStringResolver, NamedConnectionStringResolver>();
             TryAdd<IEvaluatableExpressionFilter, RelationalEvaluatableExpressionFilter>();
+            TryAdd<EvaluatableExpressionFilterBase2, RelationalEvaluatableExpressionFilter2>();
             TryAdd<IRelationalTransactionFactory, RelationalTransactionFactory>();
 
             TryAdd<ISingletonUpdateSqlGenerator>(

@@ -1201,6 +1201,33 @@ namespace Microsoft.EntityFrameworkCore.Query
 
         [ConditionalTheory]
         [MemberData(nameof(IsAsyncData))]
+        public virtual async Task Contains_with_local_non_primitive_list_inline_closure_mix(bool isAsync)
+        {
+            var id = "ALFKI";
+
+            await AssertQuery<Customer>(
+                isAsync,
+                cs => cs.Where(
+                    c => new List<Customer>
+                    {
+                        new Customer{ CustomerID = "ABCDE" },
+                        new Customer{ CustomerID = id }
+                    }.Select(i => i.CustomerID).Contains(c.CustomerID)), entryCount: 1);
+
+            id = "ANATR";
+
+            await AssertQuery<Customer>(
+                isAsync,
+                cs => cs.Where(
+                    c => new List<Customer>
+                    {
+                        new Customer{ CustomerID = "ABCDE" },
+                        new Customer{ CustomerID = id }
+                    }.Select(i => i.CustomerID).Contains(c.CustomerID)), entryCount: 1);
+        }
+
+        [ConditionalTheory]
+        [MemberData(nameof(IsAsyncData))]
         public virtual Task Contains_with_local_collection_false(bool isAsync)
         {
             string[] ids = { "ABCDE", "ALFKI" };

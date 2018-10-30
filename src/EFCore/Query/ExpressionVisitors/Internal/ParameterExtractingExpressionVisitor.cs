@@ -417,17 +417,17 @@ namespace Microsoft.EntityFrameworkCore.Query.ExpressionVisitors.Internal
                 }
             }
 
-            var newRightExpression = TryOptimize(binaryExpression.Right) ?? Visit(binaryExpression.Right);
+            var newRightExpression = /*TryOptimize(binaryExpression.Right) ??*/ Visit(binaryExpression.Right);
 
-            if (newRightExpression is ConstantExpression rightConstantExpression)
-            {
-                var constantValue = (bool)rightConstantExpression.Value;
-                if (constantValue && binaryExpression.NodeType == ExpressionType.OrElse
-                    || !constantValue && binaryExpression.NodeType == ExpressionType.AndAlso)
-                {
-                    return newRightExpression;
-                }
-            }
+            //if (newRightExpression is ConstantExpression rightConstantExpression)
+            //{
+            //    var constantValue = (bool)rightConstantExpression.Value;
+            //    if (constantValue && binaryExpression.NodeType == ExpressionType.OrElse
+            //        || !constantValue && binaryExpression.NodeType == ExpressionType.AndAlso)
+            //    {
+            //        return newRightExpression;
+            //    }
+            //}
 
             return binaryExpression.Update(newLeftExpression, binaryExpression.Conversion, newRightExpression);
         }

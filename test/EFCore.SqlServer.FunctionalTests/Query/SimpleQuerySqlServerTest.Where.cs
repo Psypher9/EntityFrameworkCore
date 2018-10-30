@@ -141,13 +141,13 @@ WHERE [c].[City] = @__city_0");
             await base.Where_method_call_nullable_type_closure_via_query_cache(isAsync);
 
             AssertSql(
-                @"@__city_Int_0='2'
+                @"@__city_Int_0='2' (Nullable = true)
 
 SELECT [e].[EmployeeID], [e].[City], [e].[Country], [e].[FirstName], [e].[ReportsTo], [e].[Title]
 FROM [Employees] AS [e]
 WHERE [e].[ReportsTo] = @__city_Int_0",
                 //
-                @"@__city_Int_0='5'
+                @"@__city_Int_0='5' (Nullable = true)
 
 SELECT [e].[EmployeeID], [e].[City], [e].[Country], [e].[FirstName], [e].[ReportsTo], [e].[Title]
 FROM [Employees] AS [e]
@@ -296,6 +296,20 @@ WHERE [c].[City] = @__city_Nested_InstancePropertyValue_0",
 SELECT [c].[CustomerID], [c].[Address], [c].[City], [c].[CompanyName], [c].[ContactName], [c].[ContactTitle], [c].[Country], [c].[Fax], [c].[Phone], [c].[PostalCode], [c].[Region]
 FROM [Customers] AS [c]
 WHERE [c].[City] = @__city_Nested_InstancePropertyValue_0");
+        }
+
+        public override async Task Where_new_instance_field_access_query_cache(bool isAsync)
+        {
+            await base.Where_new_instance_field_access_query_cache(isAsync);
+
+            AssertSql(
+                @"SELECT [c].[CustomerID], [c].[Address], [c].[City], [c].[CompanyName], [c].[ContactName], [c].[ContactTitle], [c].[Country], [c].[Fax], [c].[Phone], [c].[PostalCode], [c].[Region]
+FROM [Customers] AS [c]
+WHERE [c].[City] = N'London'",
+                //
+                @"SELECT [c].[CustomerID], [c].[Address], [c].[City], [c].[CompanyName], [c].[ContactName], [c].[ContactTitle], [c].[Country], [c].[Fax], [c].[Phone], [c].[PostalCode], [c].[Region]
+FROM [Customers] AS [c]
+WHERE [c].[City] = N'Seattle'");
         }
 
         public override async Task Where_new_instance_field_access_closure_via_query_cache(bool isAsync)
@@ -1362,12 +1376,12 @@ WHERE (CAST(@__i_0 AS nvarchar(max)) + [c].[CustomerID]) = [c].[CompanyName]");
             await base.Where_concat_string_int_comparison3(isAsync);
 
             AssertSql(
-                @"@__i_0='10'
+                @"@__p_0='30'
 @__j_1='21'
 
 SELECT [c].[CustomerID]
 FROM [Customers] AS [c]
-WHERE (((CAST(@__i_0 + 20 AS nvarchar(max)) + [c].[CustomerID]) + CAST(@__j_1 AS nvarchar(max))) + CAST(42 AS nvarchar(max))) = [c].[CompanyName]");
+WHERE (((CAST(@__p_0 AS nvarchar(max)) + [c].[CustomerID]) + CAST(@__j_1 AS nvarchar(max))) + CAST(42 AS nvarchar(max))) = [c].[CompanyName]");
         }
 
         public override async Task Where_ternary_boolean_condition_true(bool isAsync)

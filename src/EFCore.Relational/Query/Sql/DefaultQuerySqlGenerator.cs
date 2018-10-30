@@ -782,6 +782,8 @@ namespace Microsoft.EntityFrameworkCore.Query.Sql
                 case ParameterExpression parameterExpression:
                     if (parameters.TryGetValue(parameterExpression.Name, out var parameterValue))
                     {
+                        IsCacheable = false;
+
                         var argumentValuesFromParameter = (object[])parameterValue;
 
                         substitutions = new string[argumentValuesFromParameter.Length];
