@@ -67,13 +67,16 @@ function Add-Migration
     $result = (EF $dteProject $dteStartupProject $params) -join "`n" | ConvertFrom-Json
     Write-Host 'To undo this action, use Remove-Migration.'
 
-    $dteProject.ProjectItems.AddFromFile($result.migrationFile) | Out-Null
-    $DTE.ItemOperations.OpenFile($result.migrationFile) | Out-Null
+    $migrationFileUri = [System.Uri]$result.migrationFile
+    $dteProject.ProjectItems.AddFromFile($migrationFileUri.AbsoluteUri) | Out-Null
+    $DTE.ItemOperations.OpenFile($migrationFileUri.AbsoluteUri) | Out-Null
     ShowConsole
 
-    $dteProject.ProjectItems.AddFromFile($result.metadataFile) | Out-Null
+    $metadataFileUri = [System.Uri]$result.metadataFile
+    $dteProject.ProjectItems.AddFromFile($metadataFileUri.AbsoluteUri) | Out-Null
 
-    $dteProject.ProjectItems.AddFromFile($result.snapshotFile) | Out-Null
+    $snapshotFileUri = [System.Uri]$result.snapshotFile
+    $dteProject.ProjectItems.AddFromFile($snapshotFileUri.AbsoluteUri) | Out-Null
 }
 
 #
